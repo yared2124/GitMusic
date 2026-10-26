@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Github, Music2 } from 'lucide-react';
+import { ArrowRight, Github, Music2, Sparkles } from 'lucide-react';
 import HeroSearch from '../components/HeroSearch';
 import PreviewPlayer from '../components/PreviewPlayer';
 
@@ -85,10 +85,19 @@ export default function Home() {
               </div>
             </div>
             <div className="vibe-tag">
+              <Sparkles className="h-4 w-4 text-lime-300" aria-hidden />
               <div><p className="font-mono text-[9px] uppercase tracking-[.18em] text-slate-500">Vibe detected</p><p className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[.1em]">Electronic / Ambient</p></div>
             </div>
           </div>
         </section>
+
+        <div className="ticker" aria-hidden>
+          <div className="ticker-track">
+            {Array.from({ length: 2 }).map((_, repeat) => (
+              <span key={repeat}>Commits into culture <i>✦</i> Find your frequency <i>✦</i> Code. Listen. Share. <i>✦</i></span>
+            ))}
+          </div>
+        </div>
 
         <section id="how-it-works" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-24 sm:px-8 sm:py-32">
           <div className="grid gap-14 md:grid-cols-[.85fr_1.15fr] md:gap-24">
@@ -127,7 +136,7 @@ export default function Home() {
                 <h3>Ambient<br />Architect</h3><p className="vibe-caption">Calm precision. Deep focus.</p>
               </article>
               <article className="vibe-card vibe-card-lime h-[90%]">
-                <p className="vibe-number">02 / Prolific</p>
+                <p className="vibe-number">02 / Prolific</p><Sparkles className="mb-auto h-5 w-5 text-lime-300" aria-hidden />
                 <h3>Neon<br />Operator</h3><p className="vibe-caption">Fast rhythm. High output.</p>
               </article>
               <article className="vibe-card vibe-card-violet h-[62%]">
@@ -148,7 +157,8 @@ export default function Home() {
 
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 px-5 py-6 sm:px-8">
         <Link href="/" className="flex items-center gap-2 text-sm font-semibold"><span className="text-lime-300">◉</span> gitmusice</Link>
-        <p className="font-mono text-[9px] uppercase tracking-[.15em] text-slate-500">© 2026 GitMusice</p>
+        <p className="font-mono text-[9px] uppercase tracking-[.15em] text-slate-500">Turning commits into culture</p>
+        <p className="font-mono text-[9px] uppercase tracking-[.15em] text-slate-500">© 2025 GitMusice</p>
       </footer>
     </div>
   );

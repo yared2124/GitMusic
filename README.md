@@ -96,7 +96,7 @@ Then open:
 
 ### Environment variables
 
-The project includes a sample configuration in [.env.example](.env.example).
+The project includes a sample configuration in `.env.example`.
 
 ```env
 # GitHub: exact all-time contributions + 5000 req/hour. No scopes needed.
@@ -182,3 +182,4 @@ This project is provided as-is for educational and personal use. Add a license f
 - Vercel platform
 - Upstash Redis
 - Next.js and the open-source ecosystem behind the app
+

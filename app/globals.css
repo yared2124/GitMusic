@@ -1,16 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html { scrollbar-width: none; -ms-overflow-style: none; }
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 0;
   height: 0;
   display: none;
 }
-body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-style: none; }
-:focus-visible { outline: 2px solid #c6f432; outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+body {
+  background: #07090b;
+  color: #e8eef0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid #c6f432;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 
 .landing-shell {
   background-image:
@@ -20,6 +41,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
     linear-gradient(90deg, rgba(255, 255, 255, .012) 1px, transparent 1px);
   background-size: auto, auto, 42px 42px, 42px 42px;
 }
+
 .eyebrow {
   display: flex;
   align-items: center;
@@ -29,6 +51,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   letter-spacing: .19em;
   text-transform: uppercase;
 }
+
 .status-dot {
   display: inline-block;
   width: 6px;
@@ -38,10 +61,12 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   background: #c6f432;
   box-shadow: 0 0 12px rgba(198, 244, 50, .75);
 }
+
 .status-dot-cyan {
   background: #45e7ef;
   box-shadow: 0 0 12px rgba(69, 231, 239, .75);
 }
+
 .lime-button {
   display: inline-flex;
   min-height: 40px;
@@ -56,16 +81,20 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   text-transform: uppercase;
   transition: background-color .18s ease, transform .18s ease;
 }
+
 .lime-button:hover {
   transform: translateY(-1px);
   background: #d6ff50;
 }
+
 @media (max-width: 639px) {
   .lime-button.hidden { display: none; }
 }
+
 @media (min-width: 640px) {
   .lime-button.sm\:hidden { display: none; }
 }
+
 .profile-preview {
   position: relative;
   overflow: hidden;
@@ -74,6 +103,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   box-shadow: 0 24px 90px rgba(0, 0, 0, .26);
   transform: rotate(1.2deg);
 }
+
 .avatar-art {
   position: relative;
   display: grid;
@@ -86,6 +116,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   background: #e0f0ad;
   box-shadow: 0 0 20px rgba(69, 231, 239, .28);
 }
+
 .avatar-face {
   position: relative;
   display: block;
@@ -94,6 +125,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   background: #fafce8;
   clip-path: polygon(0 0, 100% 0, 100% 62%, 78% 62%, 78% 100%, 20% 100%, 20% 76%, 0 76%);
 }
+
 .avatar-face i, .avatar-face b {
   position: absolute;
   top: 16px;
@@ -101,6 +133,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   height: 7px;
   background: #172126;
 }
+
 .avatar-face i { left: 9px; }
 .avatar-face b { right: 9px; }
 .avatar-face em {
@@ -111,6 +144,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   height: 2px;
   background: #172126;
 }
+
 .avatar-level {
   position: absolute;
   right: -3px;
@@ -120,6 +154,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   color: #101619;
   font: 700 8px ui-monospace, SFMono-Regular, Menlo, monospace;
 }
+
 .wave-bar {
   width: 3px;
   min-height: 8px;
@@ -127,10 +162,12 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   background: linear-gradient(to top, #45e7ef, #c6f432);
   animation: wave-pulse 1.15s ease-in-out infinite alternate;
 }
+
 @keyframes wave-pulse {
   from { transform: scaleY(.65); opacity: .7; }
   to { transform: scaleY(1); opacity: 1; }
 }
+
 .play-button {
   display: grid;
   width: 34px;
@@ -141,6 +178,7 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   background: #c6f432;
   color: #10150a;
 }
+
 .vibe-tag {
   position: absolute;
   right: -12px;
@@ -153,10 +191,34 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   padding: 13px 16px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, .25);
 }
+
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  padding: 13px 0;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 32s linear infinite;
+  color: #68737a;
+  font: 600 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.ticker-track span { display: flex; align-items: center; gap: 36px; padding-right: 36px; }
+.ticker-track i { color: #c6f432; font-style: normal; }
+
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+
 .vibe-section {
   border: 1px solid rgba(255, 255, 255, .12);
   background: linear-gradient(130deg, rgba(255, 255, 255, .025), rgba(255, 255, 255, .006));
 }
+
 .vibe-card {
   display: flex;
   min-width: 0;
@@ -164,9 +226,11 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   border: 1px solid rgba(255, 255, 255, .12);
   padding: 13px 10px;
 }
+
 .vibe-card-cyan { background: radial-gradient(ellipse at 50% 32%, rgba(0, 178, 190, .13), transparent 62%), rgba(13, 22, 26, .72); }
 .vibe-card-lime { background: radial-gradient(ellipse at 50% 35%, rgba(179, 228, 35, .16), transparent 62%), rgba(18, 25, 17, .72); }
 .vibe-card-violet { background: radial-gradient(ellipse at 50% 35%, rgba(156, 79, 188, .16), transparent 62%), rgba(23, 18, 28, .72); }
+
 .vibe-number {
   margin-bottom: 18px;
   color: #718087;
@@ -174,13 +238,17 @@ body { background: #07090b; color: #e8eef0; scrollbar-width: none; -ms-overflow-
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+
 .vibe-card h3 { font-size: clamp(13px, 2vw, 19px); line-height: 1.05; letter-spacing: -.04em; }
 .vibe-caption { margin-top: 8px; color: #8a969b; font-size: 9px; line-height: 1.4; }
+
 .final-cta {
   border-top: 1px solid rgba(255, 255, 255, .08);
   background: radial-gradient(ellipse at center top, rgba(74, 113, 25, .11), transparent 55%);
 }
+
 @media (max-width: 640px) {
   .vibe-tag { right: -3px; bottom: -38px; }
   .vibe-section .grid-cols-3 { min-height: 235px; }
+  .ticker-track { animation-duration: 24s; }
 }
