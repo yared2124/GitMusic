@@ -138,6 +138,16 @@ Notes:
    - `UPSTASH_REDIS_REST_TOKEN`
 5. Configure your custom domain and DNS records as prompted by Vercel.
 
+### GitHub Actions deployment
+
+The deployment workflow runs on pushes to `main` or `master`. It uses the GitHub Actions `production` environment, so configure these secrets in **Repository Settings > Environments > production** (or as repository Actions secrets):
+
+- `VERCEL_TOKEN` — a Vercel access token
+- `VERCEL_ORG_ID` — the Vercel team or account ID
+- `VERCEL_PROJECT_ID` — the Vercel project ID
+
+You can find the organization and project IDs in the linked Vercel project's settings or its `.vercel/project.json` file. The workflow checks that all three secrets are present before attempting deployment.
+
 ### Production checks
 
 After deployment, verify the following:
@@ -182,4 +192,3 @@ This project is provided as-is for educational and personal use. Add a license f
 - Vercel platform
 - Upstash Redis
 - Next.js and the open-source ecosystem behind the app
-
