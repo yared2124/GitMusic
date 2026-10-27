@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Github, Music2, Sparkles } from 'lucide-react';
 import HeroSearch from '../components/HeroSearch';
-import PreviewPlayer from '../components/PreviewPlayer';
-
-const waveHeights = [22, 36, 52, 31, 64, 43, 25, 56, 70, 38, 60, 29, 48, 67, 34, 54, 23, 45, 62, 32, 50, 40];
+import SampleTrack from '../components/SampleTrack';
 
 export default function Home() {
   return (
@@ -56,7 +54,7 @@ export default function Home() {
         ))}
       </div>
 
-      <p className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-slate-500">
+      <p className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-slate-400">
         <span className="flex items-center gap-2"><span className="status-dot status-dot-cyan" /> Free, no sign-up</span>
         <span>Uses public data only</span>
       </p>
@@ -88,13 +86,7 @@ export default function Home() {
         <p className="text-xs text-slate-400">Now playing</p>
         <p className="mt-1.5 text-xl tracking-tight">Commit After Midnight</p>
 
-        <div className="mt-5 flex h-14 items-center justify-center gap-[5px]" aria-label="Audio waveform">
-          {waveHeights.map((height, index) => (
-            <span key={index} className="wave-bar" style={{ height: `${height}%`, animationDelay: `${index * 35}ms` }} />
-          ))}
-        </div>
-
-        <PreviewPlayer />
+        <SampleTrack />
       </div>
     </div>
 
@@ -168,14 +160,14 @@ export default function Home() {
           <p className="eyebrow justify-center"><span className="status-dot" /> Your track is waiting</p>
           <h2 className="mx-auto mt-5 max-w-3xl text-5xl font-medium leading-[.98] tracking-[-.07em] sm:text-7xl">What does your<br />GitHub <em className="font-serif font-normal text-lime-300">sound like?</em></h2>
           <a href="#try-it" className="lime-button mt-8">Generate my GitMusice <ArrowRight className="h-4 w-4" aria-hidden /></a>
-          <p className="mt-2 font-mono text-[9px] tracking-[.15em] text-slate-500">It takes less than 10 seconds.</p>
+          <p className="mt-2 font-mono text-[11px] tracking-[.15em] text-slate-400">It takes less than 10 seconds.</p>
         </section>
       </main>
 
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-white/10 px-5 py-6 sm:px-8">
         <Link href="/" className="flex items-center gap-2 text-sm font-semibold"><span className="text-lime-300">◉</span> gitmusice</Link>
-        <p className="font-mono text-[9px] uppercase tracking-[.15em] text-slate-500">Turning commits into culture</p>
-        <p className="font-mono text-[9px] uppercase tracking-[.15em] text-slate-500">© 2025 GitMusice</p>
+        <p className="font-mono text-[11px] uppercase tracking-[.15em] text-slate-400">Turning commits into culture</p>
+        <p className="font-mono text-[11px] uppercase tracking-[.15em] text-slate-400">© {new Date().getFullYear()} GitMusice</p>
       </footer>
     </div>
   );
