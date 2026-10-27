@@ -33,63 +33,85 @@ export default function Home() {
       </header>
 
       <main>
-        <section className="mx-auto grid min-h-[650px] max-w-6xl items-center gap-14 px-5 py-20 sm:px-8 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:py-24">
-          <div className="relative z-10">
-            <p className="eyebrow"><span className="status-dot" /> Your GitHub, remastered</p>
-            <h1 className="mt-6 max-w-2xl text-[clamp(3.4rem,7vw,6.6rem)] font-medium leading-[.91] tracking-[-.075em]">
-              Your code has<br />a <em className="font-serif font-normal text-lime-300">soundtrack.</em>
-            </h1>
-            <p className="mt-7 max-w-xl text-lg font-bold leading-8 text-slate-200 sm:text-xl sm:leading-9">
-              GitMusice turns your public GitHub activity into a unique musical identity—complete with a vibe, tier, and track made from the way you build.
-            </p>
-            <div id="try-it" className="mt-8 max-w-xl scroll-mt-8">
-              <HeroSearch />
-            </div>
-            <p className="mt-2 flex items-center gap-2 font-mono text-[10px] tracking-[.12em] text-slate-500">
-              <span className="status-dot status-dot-cyan" /> Free to try · No sign-up · Public data only
-            </p>
-          </div>
+       <section className="hero mx-auto grid max-w-6xl items-center gap-16 px-5 pb-24 pt-14 sm:px-8 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.05fr_.95fr] lg:gap-14 lg:py-20">
+  <div className="relative z-10">
+    <p className="eyebrow"><span className="status-dot" /> Your GitHub, remastered</p>
 
-          <div className="relative mx-auto w-full max-w-[510px] lg:ml-auto">
-            <div className="profile-preview">
-              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 font-mono text-[9px] uppercase tracking-[.18em] text-slate-500">
-                <span>Live profile / 001</span>
-                <span className="flex items-center gap-2"><span className="status-dot status-dot-cyan" /> Analyzed</span>
-              </div>
-              <div className="flex items-center gap-5 px-6 py-7 sm:px-8">
-                <div className="avatar-art" aria-hidden>
-                  <span className="avatar-face"><i /><b /><em /></span>
-                  <span className="avatar-level">LV. 07</span>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] text-cyan-300">@theoctocat</p>
-                  <p className="mt-2 text-xl tracking-tight sm:text-2xl">Midnight Builder</p>
-                  <p className="mt-2 font-mono text-[9px] uppercase tracking-[.16em] text-slate-500">Legend tier · Cyan pulse</p>
-                </div>
-              </div>
-              <div className="border-t border-white/10 px-6 py-5 sm:px-8">
-                <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[.18em] text-slate-500">
-                  <span>Now playing</span><span>03:42</span>
-                </div>
-                <p className="mt-3 text-lg tracking-tight">Commit After Midnight</p>
-                <div className="mt-4 flex h-14 items-center justify-center gap-[5px]" aria-label="Audio waveform">
-                  {waveHeights.map((height, index) => (
-                    <span key={index} className="wave-bar" style={{ height: `${height}%`, animationDelay: `${index * 35}ms` }} />
-                  ))}
-                </div>
-                <div className="mt-2 flex items-center gap-3">
-                  <PreviewPlayer />
-                  <div className="h-[2px] flex-1 bg-white/10"><div className="h-full w-[42%] bg-lime-300" /></div>
-                  <span className="font-mono text-[9px] text-slate-500">01:20</span>
-                </div>
-              </div>
-            </div>
-            <div className="vibe-tag">
-              <Sparkles className="h-4 w-4 text-lime-300" aria-hidden />
-              <div><p className="font-mono text-[9px] uppercase tracking-[.18em] text-slate-500">Vibe detected</p><p className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[.1em]">Electronic / Ambient</p></div>
-            </div>
-          </div>
-        </section>
+    <h1 className="mt-6 max-w-2xl text-[clamp(3.2rem,7.2vw,6.4rem)] font-medium leading-[.92] tracking-[-.06em]">
+      Your code has<br />
+      a <em className="font-serif font-normal italic text-lime-300">soundtrack.</em>
+    </h1>
+
+    <p className="mt-7 max-w-lg text-lg leading-8 text-slate-300 sm:text-xl sm:leading-9">
+      GitMusice reads your public GitHub activity and turns it into a vibe, a tier and a track that sounds like the way you build.
+    </p>
+
+    <div id="try-it" className="mt-9 max-w-xl scroll-mt-8">
+      <HeroSearch />
+
+      <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-400">
+        <span>No username handy? Try</span>
+        {['torvalds', 'gaearon', 'sindresorhus'].map((name) => (
+          <Link key={name} href={`/${name}`} className="hero-chip">@{name}</Link>
+        ))}
+      </div>
+
+      <p className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-slate-500">
+        <span className="flex items-center gap-2"><span className="status-dot status-dot-cyan" /> Free, no sign-up</span>
+        <span>Uses public data only</span>
+      </p>
+    </div>
+  </div>
+
+  <div className="relative mx-auto w-full max-w-[500px] lg:ml-auto">
+    <div className="hero-aura" aria-hidden />
+
+    <div className="hero-card">
+      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 text-xs text-slate-400">
+        <span>Sample profile</span>
+        <span className="flex items-center gap-2"><span className="status-dot status-dot-cyan" /> Analyzed</span>
+      </div>
+
+      <div className="flex items-center gap-5 px-6 py-7 sm:px-8">
+        <div className="avatar-art" aria-hidden>
+          <span className="avatar-face"><i /><b /><em /></span>
+          <span className="avatar-level">LV. 07</span>
+        </div>
+        <div>
+          <p className="font-mono text-xs text-cyan-300">@theoctocat</p>
+          <p className="mt-1.5 text-2xl tracking-tight sm:text-[1.7rem]">Midnight Builder</p>
+          <p className="mt-1.5 text-sm text-slate-400">Legend tier · Cyan pulse</p>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10 px-6 py-5 sm:px-8">
+        <p className="text-xs text-slate-400">Now playing</p>
+        <p className="mt-1.5 text-xl tracking-tight">Commit After Midnight</p>
+
+        <div className="mt-5 flex h-14 items-center justify-center gap-[5px]" aria-label="Audio waveform">
+          {waveHeights.map((height, index) => (
+            <span key={index} className="wave-bar" style={{ height: `${height}%`, animationDelay: `${index * 35}ms` }} />
+          ))}
+        </div>
+
+        <div className="mt-3 flex items-center gap-3">
+          <PreviewPlayer />
+          <span className="font-mono text-xs text-slate-400">01:20</span>
+          <div className="hero-progress"><i /></div>
+          <span className="font-mono text-xs text-slate-500">03:42</span>
+        </div>
+      </div>
+    </div>
+
+    <div className="hero-vibe">
+      <Sparkles className="h-4 w-4 text-lime-300" aria-hidden />
+      <div>
+        <p className="text-xs text-slate-400">Vibe detected</p>
+        <p className="mt-0.5 text-sm font-semibold tracking-tight">Electronic / Ambient</p>
+      </div>
+    </div>
+  </div>
+</section>
 
         <div className="ticker" aria-hidden>
           <div className="ticker-track">
