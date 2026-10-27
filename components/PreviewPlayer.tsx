@@ -33,9 +33,14 @@ export default function PreviewPlayer() {
 
   return (
     <>
-      <button type="button" className="play-button" onClick={() => void toggle()} aria-label={playing ? 'Pause sample soundtrack' : 'Play sample soundtrack'} aria-pressed={playing}>
-        {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="ml-0.5 h-4 w-4 fill-current" />}
-      </button>
+      <div className="mt-3 flex items-center gap-3">
+        <button type="button" className="play-button" onClick={() => void toggle()} aria-label={playing ? 'Pause sample soundtrack' : 'Play sample soundtrack'} aria-pressed={playing}>
+          {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="ml-0.5 h-4 w-4 fill-current" />}
+        </button>
+        <span className="font-mono text-xs text-slate-400">01:20</span>
+        <div className="hero-progress"><i /></div>
+        <span className="font-mono text-xs text-slate-500">03:42</span>
+      </div>
       {error && <p className="mt-3 text-xs text-rose-300" role="alert">{error}</p>}
     </>
   );

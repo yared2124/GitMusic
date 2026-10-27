@@ -34,7 +34,7 @@ export default function Home() {
 
       <main>
        <section className="hero mx-auto grid max-w-6xl items-center gap-16 px-5 pb-24 pt-14 sm:px-8 lg:min-h-[calc(100vh-72px)] lg:grid-cols-[1.05fr_.95fr] lg:gap-14 lg:py-20">
-  <div className="relative z-10">
+  <div className="relative z-10 min-w-0">
     <p className="eyebrow"><span className="status-dot" /> Your GitHub, remastered</p>
 
     <h1 className="mt-6 max-w-2xl text-[clamp(3.2rem,7.2vw,6.4rem)] font-medium leading-[.92] tracking-[-.06em]">
@@ -52,7 +52,7 @@ export default function Home() {
       <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-400">
         <span>No username handy? Try</span>
         {['torvalds', 'gaearon', 'sindresorhus'].map((name) => (
-          <Link key={name} href={`/${name}`} className="hero-chip">@{name}</Link>
+          <Link key={name} href={`/${name}`} prefetch={false} className="hero-chip">@{name}</Link>
         ))}
       </div>
 
@@ -63,7 +63,7 @@ export default function Home() {
     </div>
   </div>
 
-  <div className="relative mx-auto w-full max-w-[500px] lg:ml-auto">
+  <div className="relative mx-auto w-full min-w-0 max-w-[500px] lg:ml-auto">
     <div className="hero-aura" aria-hidden />
 
     <div className="hero-card">
@@ -77,7 +77,7 @@ export default function Home() {
           <span className="avatar-face"><i /><b /><em /></span>
           <span className="avatar-level">LV. 07</span>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="font-mono text-xs text-cyan-300">@theoctocat</p>
           <p className="mt-1.5 text-2xl tracking-tight sm:text-[1.7rem]">Midnight Builder</p>
           <p className="mt-1.5 text-sm text-slate-400">Legend tier · Cyan pulse</p>
@@ -94,12 +94,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="mt-3 flex items-center gap-3">
-          <PreviewPlayer />
-          <span className="font-mono text-xs text-slate-400">01:20</span>
-          <div className="hero-progress"><i /></div>
-          <span className="font-mono text-xs text-slate-500">03:42</span>
-        </div>
+        <PreviewPlayer />
       </div>
     </div>
 
