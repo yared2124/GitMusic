@@ -2,23 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
 body {
   background: #07090b;
   color: #e8eef0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 :focus-visible {
@@ -47,7 +33,7 @@ body {
   align-items: center;
   gap: .65rem;
   color: #c6f432;
-  font: 600 9px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 600 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .19em;
   text-transform: uppercase;
 }
@@ -76,7 +62,7 @@ body {
   background: #c6f432;
   padding: 0 16px;
   color: #11150a;
-  font: 700 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .08em;
   text-transform: uppercase;
   transition: background-color .18s ease, transform .18s ease;
@@ -152,7 +138,7 @@ body {
   background: #45e7ef;
   padding: 3px 6px;
   color: #101619;
-  font: 700 8px ui-monospace, SFMono-Regular, Menlo, monospace;
+  font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .wave-bar {
@@ -160,6 +146,9 @@ body {
   min-height: 8px;
   border-radius: 3px;
   background: linear-gradient(to top, #45e7ef, #c6f432);
+}
+
+.waveform-playing .wave-bar {
   animation: wave-pulse 1.15s ease-in-out infinite alternate;
 }
 
@@ -203,8 +192,8 @@ body {
   display: flex;
   width: max-content;
   animation: ticker-scroll 32s linear infinite;
-  color: #68737a;
-  font: 600 9px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #94a3b8;
+  font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .2em;
   text-transform: uppercase;
 }
@@ -233,14 +222,14 @@ body {
 
 .vibe-number {
   margin-bottom: 18px;
-  color: #718087;
-  font: 8px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #94a3b8;
+  font: 11px ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .08em;
   text-transform: uppercase;
 }
 
 .vibe-card h3 { font-size: clamp(13px, 2vw, 19px); line-height: 1.05; letter-spacing: -.04em; }
-.vibe-caption { margin-top: 8px; color: #8a969b; font-size: 9px; line-height: 1.4; }
+.vibe-caption { margin-top: 8px; color: #94a3b8; font-size: 11px; line-height: 1.4; }
 
 .final-cta {
   border-top: 1px solid rgba(255, 255, 255, .08);
