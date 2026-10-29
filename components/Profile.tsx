@@ -1,43 +1,37 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Check, Copy, Pause, Play, Github } from 'lucide-react';
+import { Check, Copy, Github } from 'lucide-react';
 import Nav from './Nav';
 import { Engine } from '../lib/audio';
 import { getTier } from '../lib/tiers';
 import { TIER_ICONS } from './tierIcons';
+import PoemPlayer from './PoemPlayer';
+import type { Poem } from '../lib/poem';
 
 const nf = (n: number) => n.toLocaleString('en-US');
-const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 const glass = 'rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl';
 
-export default function Profile({ username, data, error }: { username: string; data?: any; error?: string }) {
+export default function Profile({ username, data, error, poem, bpm }: { username: string; data?: any; error?: string; poem?: Poem | null; bpm?: number }) {
   const tier = data ? getTier(data.contributions) : null;
   const color = tier?.cur.color || '#9ca3af';
   const goat = tier?.cur.key === 'goat';
-  const [playing, setPlaying] = useState(false), [t, setT] = useState(0), [dur, setDur] = useState(252), [copied, setCopied] = useState(false);
-  const eng = useRef<Engine | null>(null), cv = useRef<HTMLCanvasElement>(null), av = useRef<HTMLDivElement>(null), fl = useRef<HTMLDivElement>(null);
+  const [playing, setPlaying] = useState(false), [copied, setCopied] = useState(false);
+  const eng = useRef<Engine | null>(null), av = useRef<HTMLDivElement>(null), fl = useRef<HTMLDivElement>(null);
 
   useEffect(() => { if (goat && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) import('canvas-confetti').then((m) => m.default({ particleCount: 180, spread: 100, origin: { y: 0.3 }, colors: ['#facc15', '#fde047', '#ffffff'] })); }, [goat]);
   useEffect(() => () => eng.current?.stop(), []);
 
   useEffect(() => {
-    const c = cv.current; if (!c) return;
-    const g = c.getContext('2d')!; let raf = 0;
+    let raf = 0;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; let sm = 0;
     const loop = () => {
-      const e = eng.current, f = e?.freq(), W = c.width, H = c.height, N = 40;
-      g.clearRect(0, 0, W, H); g.fillStyle = color;
-      for (let i = 0; i < N; i++) {
-        const v = f ? f[Math.floor((i * 120) / N) + 1] / 255 : 0.1 + 0.07 * Math.sin(i * 1.7);
-        const h = Math.max(4, v * H * 0.95); g.fillRect(i * (W / N) + 2, (H - h) / 2, 4, h);
-      }
+      const e = eng.current;
       // Smoothed bass so nothing flashes faster than a few times per second; skipped entirely for reduced motion.
       sm = sm * 0.9 + (e && e.running() ? e.bass() : 0) * 0.1;
       if (!reduce) {
         if (av.current) { av.current.style.transform = `scale(${1 + sm * 0.16})`; av.current.style.boxShadow = `0 0 ${24 + sm * 70}px ${color}`; }
         if (goat && fl.current) fl.current.style.opacity = String(Math.min(0.3, sm * 0.5));
       }
-      if (e && e.running()) { const x = e.time(); setT((p) => (Math.floor(p) === Math.floor(x) ? p : x)); }
       raf = requestAnimationFrame(loop);
     };
     loop(); return () => cancelAnimationFrame(raf);
@@ -47,7 +41,7 @@ export default function Profile({ username, data, error }: { username: string; d
     if (!eng.current) {
       let src: string | undefined;
       try { const r = await fetch(`/tracks/${tier!.cur.key}.mp3`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').includes('audio')) src = `/tracks/${tier!.cur.key}.mp3`; } catch {}
-      const e = new Engine(data.login, tier!.cur.n, src); await e.start(); eng.current = e; setDur(e.duration()); setPlaying(true); return;
+      const e = new Engine(data.login, tier!.cur.n, src); await e.start(); eng.current = e; setPlaying(true); return;
     }
     if (playing) { await eng.current.pause(); setPlaying(false); } else { await eng.current.resume(); setPlaying(true); }
   };
@@ -107,21 +101,14 @@ export default function Profile({ username, data, error }: { username: string; d
               </section>
             </div>
             <div className="flex flex-col gap-5">
-              <section className={glass}>
-                <div className="flex justify-between text-xs text-slate-400"><span>Now playing</span><span>{fmt(dur)}</span></div>
-                <p className="mt-4 text-sm font-medium" style={{ color }}>{tier!.cur.name} frequency</p>
-                <h2 className="mt-1 text-3xl font-semibold leading-tight tracking-tight">{tier!.cur.track}</h2>
-                <p className="mt-1 text-sm text-slate-400">GitMusice Originals · {tier!.cur.name} tier</p>
-                <canvas ref={cv} width={480} height={88} className="mx-auto my-6 h-11 w-60" aria-hidden />
-                <div className="flex items-center gap-4 border-t border-white/10 pt-5">
-                  <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-black transition hover:scale-105" style={{ background: color }}>
-                    {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 translate-x-px" />}</button>
-                  <div className="flex-1">
-                    <div className="h-1 rounded bg-white/10"><div className="h-full rounded" style={{ width: Math.min(100, (t / dur) * 100) + '%', background: color }} /></div>
-                    <div className="mt-1.5 flex justify-between text-xs text-slate-400"><span>{fmt(t)}</span><span>{fmt(dur)}</span></div>
-                  </div>
-                </div>
-              </section>
+              {poem && (
+                <PoemPlayer
+                  poem={poem}
+                  bpm={bpm ?? 100}
+                  onPlay={() => { if (!playing) void toggle(); }}
+                  onStop={() => { void eng.current?.pause(); setPlaying(false); }}
+                />
+              )}
               <section className={glass}>
                 <div className="flex justify-between text-xs text-slate-400"><span>README badge</span><span>Share your vibe</span></div>
                 <div className="mt-4 rounded-lg border border-white/10 bg-black/30 p-3"><img src={`/api/badge/${data.login}`} alt="GitMusice badge preview" className="h-10" /></div>
