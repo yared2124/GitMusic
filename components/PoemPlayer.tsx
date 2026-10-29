@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { speakPoem } from '@/lib/sing';
-import type { Poem } from '@/lib/poem';
+import { speakPoem } from '../lib/sing';
+import type { Poem } from '../lib/poem';
 
 export default function PoemPlayer({ poem, bpm, onPlay, onStop }: {
   poem: Poem; bpm: number; onPlay?: () => void; onStop?: () => void;
