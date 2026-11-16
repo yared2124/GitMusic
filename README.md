@@ -1,18 +1,27 @@
 # GitMusice
 
-GitMusice turns a public GitHub profile into a personalized music identity. It analyzes contribution patterns, ranks a developer by contribution volume, assigns a tier, and generates a dynamic audio identity with a profile page and README badge.
+GitMusice turns a public GitHub profile into a personalized classical music identity. It evaluates a developer against 6 core criteria out of 100% (with a guaranteed minimum floor score of 15%), breaks down performance across shipping, consistency, range, depth, impact, and collaboration, and dedicates a custom procedural classical music piece with real-time waveform visualizers, dynamic profile cards, and live README badges.
 
-Built with Next.js, TypeScript, and Tailwind CSS, GitMusice is designed to showcase how coding activity can be translated into a visual and sonic profile.
+Built with Next.js 14, TypeScript, Tailwind CSS, and Web Audio API, GitMusice celebrates your code through classical harmony.
 
 ## Features
 
-- Personalized developer profile pages for any public GitHub username
-- Contribution-based tier system with progression and leaderboards-style naming
-- Dynamic audio track and visual identity tied to each tier
-- Animated SVG README badge for embedding in profiles or project docs
-- Open Graph preview card support for social sharing
-- IP-based request throttling via Upstash Redis
-- Cached GitHub profile data with graceful fallback behavior
+- **100% Scale Evaluation (Min 15%)**: Evaluates developers out of 100% across 6 core criteria adapted from Specsheet:
+  - **SHP (Shipping)**: Commits, pull requests, releases, and deployed project velocity.
+  - **CON (Consistency)**: Continuous active cadence, streaks, and commit density.
+  - **RNG (Range)**: Breadth and diversity of programming languages in active use.
+  - **DEP (Depth)**: Account longevity, repository scale, and codebase lifespan.
+  - **IMP (Impact)**: Community stars, forks, and follower resonance.
+  - **COL (Collaboration)**: Open source collaboration, multi-repo participation, and reviews.
+- **Dedicated Classical Music System**: As your score increases, you unlock richer, more complex and beautiful classical music pieces:
+  - **15% – 34% (Adagio Tranquillo)**: *Nocturne No. 1 in C Minor* — Meditative, solitary classical piano nocturne.
+  - **35% – 54% (Andante Cantabile)**: *Sonata in G Major* — Classical chamber sonata with Alberti bass and cello counterpoint.
+  - **55% – 74% (Allegro Vivace)**: *Concerto in D Minor* — Spirited baroque/classical concerto with string quartet polyphony.
+  - **75% – 89% (Vivace con Spirito)**: *Maestro's Rhapsody in B Minor* — Soaring romantic rhapsody with virtuosic piano runs and symphonic strings.
+  - **90% – 100% (Presto Maestoso)**: *Symphonia Grandiosa (Opus Magnum)* — Triumphant, virtuosic masterpiece symphony reserved for open-source legends.
+- **Live Canvas Audio Visualizer**: Real-time Web Audio API harmonic spectrum and responsive waveform oscilloscope.
+- **Animated SVG README Badges**: Live dynamic badges showing your score percentage and dedicated classical movement.
+- **Social Open Graph Cards**: High-resolution generated preview cards.
 
 ## Live product concept
 
