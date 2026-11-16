@@ -14,7 +14,7 @@ export default function PreviewPlayer({ onPlayingChange }: { onPlayingChange: (p
   const toggle = async () => {
     try {
       if (!engine.current) {
-        const player = new Engine('theoctocat', 7);
+        const player = new Engine('theoctocat', 4, undefined, 85);
         await player.start();
         engine.current = player;
         setPlaying(true);
@@ -37,7 +37,13 @@ export default function PreviewPlayer({ onPlayingChange }: { onPlayingChange: (p
   return (
     <>
       <div className="mt-3 flex items-center gap-3">
-        <button type="button" className="play-button" onClick={() => void toggle()} aria-label={playing ? 'Pause sample soundtrack' : 'Play sample soundtrack'} aria-pressed={playing}>
+        <button
+          type="button"
+          className="play-button"
+          onClick={() => void toggle()}
+          aria-label={playing ? 'Pause sample classical soundtrack' : 'Play sample classical soundtrack'}
+          aria-pressed={playing}
+        >
           {playing ? <Pause className="h-4 w-4 fill-current" /> : <Play className="ml-0.5 h-4 w-4 fill-current" />}
         </button>
         <span className="font-mono text-xs text-slate-400">01:20</span>
