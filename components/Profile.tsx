@@ -1,134 +1,510 @@
 'use client';
+
 import { useEffect, useRef, useState } from 'react';
-import { Check, Copy, Pause, Play, Github } from 'lucide-react';
+import {
+  Check,
+  Copy,
+  Pause,
+  Play,
+  Github,
+  Sparkles,
+  Award,
+  Music,
+  Activity,
+  Layers,
+  Zap,
+  Star,
+  GitFork,
+  ArrowUpRight,
+  ShieldCheck,
+  Flame,
+  Radio,
+} from 'lucide-react';
 import Nav from './Nav';
 import { Engine } from '../lib/audio';
-import { getTier } from '../lib/tiers';
-import { TIER_ICONS } from './tierIcons';
+import { evaluateDeveloper, DeveloperEvaluation } from '../lib/criteria';
+import ClassicalVisualizer from './ClassicalVisualizer';
 
 const nf = (n: number) => n.toLocaleString('en-US');
-const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const fmt = (s: number) =>
+  `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 const glass = 'rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl';
 
-export default function Profile({ username, data, error }: { username: string; data?: any; error?: string }) {
-  const tier = data ? getTier(data.contributions) : null;
-  const color = tier?.cur.color || '#9ca3af';
-  const goat = tier?.cur.key === 'goat';
-  const [playing, setPlaying] = useState(false), [t, setT] = useState(0), [dur, setDur] = useState(252), [copied, setCopied] = useState(false);
-  const eng = useRef<Engine | null>(null), cv = useRef<HTMLCanvasElement>(null), av = useRef<HTMLDivElement>(null), fl = useRef<HTMLDivElement>(null);
+export default function Profile({
+  username,
+  data,
+  error,
+}: {
+  username: string;
+  data?: any;
+  error?: string;
+}) {
+  const [evaluation, setEvaluation] = useState<DeveloperEvaluation | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [t, setT] = useState(0);
+  const [dur, setDur] = useState(288);
+  const [copied, setCopied] = useState(false);
 
-  useEffect(() => { if (goat && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) import('canvas-confetti').then((m) => m.default({ particleCount: 180, spread: 100, origin: { y: 0.3 }, colors: ['#facc15', '#fde047', '#ffffff'] })); }, [goat]);
-  useEffect(() => () => eng.current?.stop(), []);
+  const eng = useRef<Engine | null>(null);
+  const av = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const c = cv.current; if (!c) return;
-    const g = c.getContext('2d')!; let raf = 0;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; let sm = 0;
-    const loop = () => {
-      const e = eng.current, f = e?.freq(), W = c.width, H = c.height, N = 40;
-      g.clearRect(0, 0, W, H); g.fillStyle = color;
-      for (let i = 0; i < N; i++) {
-        const v = f ? f[Math.floor((i * 120) / N) + 1] / 255 : 0.1 + 0.07 * Math.sin(i * 1.7);
-        const h = Math.max(4, v * H * 0.95); g.fillRect(i * (W / N) + 2, (H - h) / 2, 4, h);
-      }
-      // Smoothed bass so nothing flashes faster than a few times per second; skipped entirely for reduced motion.
-      sm = sm * 0.9 + (e && e.running() ? e.bass() : 0) * 0.1;
-      if (!reduce) {
-        if (av.current) { av.current.style.transform = `scale(${1 + sm * 0.16})`; av.current.style.boxShadow = `0 0 ${24 + sm * 70}px ${color}`; }
-        if (goat && fl.current) fl.current.style.opacity = String(Math.min(0.3, sm * 0.5));
-      }
-      if (e && e.running()) { const x = e.time(); setT((p) => (Math.floor(p) === Math.floor(x) ? p : x)); }
-      raf = requestAnimationFrame(loop);
-    };
-    loop(); return () => cancelAnimationFrame(raf);
-  }, [color, goat, data]);
+    if (data) {
+      const ev = evaluateDeveloper(data);
+      setEvaluation(ev);
+    }
+  }, [data]);
 
+  useEffect(() => () => eng.current?.stop(), []);
+
+  const tier = evaluation?.classicalTier;
+  const score = evaluation?.overallScore ?? 15;
+  const color = tier?.color || '#38bdf8';
+  const isHighMaster = score >= 85;
+
+  useEffect(() => {
+    if (isHighMaster && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      import('canvas-confetti').then((m) =>
+        m.default({
+          particleCount: 160,
+          spread: 90,
+          origin: { y: 0.35 },
+          colors: ['#facc15', '#fde047', '#ffffff', '#38bdf8'],
+        })
+      );
+    }
+  }, [isHighMaster]);
+
+  // Audio play/pause toggle
   const toggle = async () => {
+    if (!data || !evaluation) return;
     if (!eng.current) {
       let src: string | undefined;
-      try { const r = await fetch(`/tracks/${tier!.cur.key}.mp3`, { method: 'HEAD' }); if (r.ok && (r.headers.get('content-type') || '').includes('audio')) src = `/tracks/${tier!.cur.key}.mp3`; } catch {}
-      const e = new Engine(data.login, tier!.cur.n, src); await e.start(); eng.current = e; setDur(e.duration()); setPlaying(true); return;
+      // Check if custom track exists
+      try {
+        const r = await fetch(`/tracks/${evaluation.classicalTier.id}.mp3`, { method: 'HEAD' });
+        if (r.ok && (r.headers.get('content-type') || '').includes('audio')) {
+          src = `/tracks/${evaluation.classicalTier.id}.mp3`;
+        }
+      } catch {}
+
+      const e = new Engine(data.login, evaluation.classicalTier.level, src, score);
+      await e.start();
+      eng.current = e;
+      setDur(e.duration());
+      setPlaying(true);
+      return;
     }
-    if (playing) { await eng.current.pause(); setPlaying(false); } else { await eng.current.resume(); setPlaying(true); }
+
+    if (playing) {
+      await eng.current.pause();
+      setPlaying(false);
+    } else {
+      await eng.current.resume();
+      setPlaying(true);
+    }
   };
+
+  // Sync playback time for progress bar
+  useEffect(() => {
+    let animId = 0;
+    const syncTime = () => {
+      if (eng.current && eng.current.running()) {
+        const x = eng.current.time();
+        setT(x);
+      }
+      animId = requestAnimationFrame(syncTime);
+    };
+    syncTime();
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
   const copy = async () => {
     const o = location.origin;
-    await navigator.clipboard.writeText(`[![GitMusice Vibe](${o}/api/badge/${data.login})](${o}/${data.login})`);
-    setCopied(true); setTimeout(() => setCopied(false), 1800);
+    await navigator.clipboard.writeText(
+      `[![GitMusice Classical Score](${o}/api/badge/${data.login})](${o}/${data.login})`
+    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const Icon = tier ? TIER_ICONS[tier.cur.icon] : null;
-  const pct = tier?.next ? Math.min(100, ((data.contributions - tier.cur.min) / (tier.next.min - tier.cur.min)) * 100) : 100;
-  const NIcon = tier?.next ? TIER_ICONS[tier.next.icon] : null;
-
   return (
-    <div className="min-h-screen" style={{ background: `radial-gradient(800px 480px at 20% 0, ${color}22, transparent 60%), #07090b` }}>
-      {goat && <div ref={fl} aria-hidden className="pointer-events-none fixed inset-0 opacity-0" style={{ boxShadow: `inset 0 0 180px ${color}` }} />}
+    <div
+      className="min-h-screen pb-16 text-slate-100"
+      style={{
+        background: `radial-gradient(1000px 600px at 50% 0, ${color}20, transparent 70%), #07090d`,
+      }}
+    >
       <Nav initial={username} />
-      <main className="mx-auto max-w-5xl px-4 py-10">
-        {error || !data ? (
-          <div className={glass + ' text-center'} role="alert"><p className="text-lg">{error}</p><p className="mt-2 text-sm text-slate-400">Check the spelling and search again.</p></div>
+
+      <main className="mx-auto max-w-6xl px-4 pt-8">
+        {error || !data || !evaluation ? (
+          <div className={glass + ' text-center my-12'} role="alert">
+            <p className="text-xl font-medium text-rose-300">{error || 'User not found'}</p>
+            <p className="mt-2 text-sm text-slate-400">
+              Check the spelling of the GitHub username and try again.
+            </p>
+          </div>
         ) : (
-          <div className="grid gap-5 lg:grid-cols-2">
-            <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8">
+            {/* 1. DEVELOPER HERO & OVERALL SCORE (100% SCALE, MIN 15%) */}
+            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+              {/* Profile Bio Card */}
               <section className={glass}>
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-                  <div ref={av} className="relative h-32 w-32 shrink-0 rounded-full will-change-transform" style={{ border: `2px solid ${color}` }}>
-                    <img src={data.avatar} alt={`${data.login} avatar`} className="h-full w-full rounded-full object-cover" />
-                    <span className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded px-2 py-0.5 text-xs font-bold text-black" style={{ background: color }}>
-                      <Icon className="h-3 w-3" aria-hidden /> LV. {String(tier!.cur.n).padStart(2, '0')}</span>
+                  <div
+                    ref={av}
+                    className="relative h-28 w-28 shrink-0 rounded-2xl will-change-transform sm:h-32 sm:w-32"
+                    style={{
+                      border: `2px solid ${color}`,
+                      boxShadow: `0 0 35px ${color}35`,
+                    }}
+                  >
+                    <img
+                      src={data.avatar}
+                      alt={`${data.login} avatar`}
+                      className="h-full w-full rounded-2xl object-cover"
+                    />
+                    <span
+                      className="absolute -bottom-2.5 left-1/2 flex -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-md px-2 py-0.5 font-mono text-[11px] font-bold text-black"
+                      style={{ background: color }}
+                    >
+                      <Award className="h-3 w-3" /> {score}% OVR
+                    </span>
                   </div>
+
                   <div className="min-w-0">
-                    <a href={data.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-cyan-300 hover:underline"><Github className="h-3.5 w-3.5" aria-hidden />@{data.login}</a>
-                    <h1 className="truncate text-3xl font-semibold tracking-tight">{data.name}</h1>
-                    <p className="mt-1 text-sm text-slate-300">{data.bio}</p>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={data.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 font-mono text-xs text-sky-400 hover:underline"
+                      >
+                        <Github className="h-3.5 w-3.5" />@{data.login}
+                      </a>
+                      <span className="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">
+                        {evaluation.stats.yearsActive} yrs active
+                      </span>
+                    </div>
+
+                    <h1 className="mt-1 truncate text-2xl font-bold tracking-tight sm:text-3xl">
+                      {data.name || data.login}
+                    </h1>
+                    <p className="mt-1.5 line-clamp-2 text-sm text-slate-300">{data.bio}</p>
+
+                    {evaluation.stats.languages.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {evaluation.stats.languages.slice(0, 5).map((lang) => (
+                          <span
+                            key={lang}
+                            className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[10px] text-slate-300"
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-                <dl className="mt-6 grid grid-cols-3 gap-4 border-t border-white/10 pt-5">
-                  {[['Contributions', nf(data.contributions)], ['Repositories', nf(data.repos)], ['Followers', nf(data.followers)]].map(([k, v]) => (
-                    <div key={k}><dd className="text-xl font-semibold">{v}</dd><dt className="text-xs text-slate-400">{k}</dt></div>))}
+
+                <dl className="mt-6 grid grid-cols-4 gap-2 border-t border-white/10 pt-5 text-center sm:text-left">
+                  <div>
+                    <dd className="font-mono text-lg font-bold sm:text-xl">
+                      {nf(data.contributions)}
+                    </dd>
+                    <dt className="text-[11px] text-slate-400">Commits</dt>
+                  </div>
+                  <div>
+                    <dd className="font-mono text-lg font-bold sm:text-xl">{nf(data.repos)}</dd>
+                    <dt className="text-[11px] text-slate-400">Repos</dt>
+                  </div>
+                  <div>
+                    <dd className="font-mono text-lg font-bold sm:text-xl">
+                      {nf(evaluation.stats.stars)}
+                    </dd>
+                    <dt className="text-[11px] text-slate-400">Stars</dt>
+                  </div>
+                  <div>
+                    <dd className="font-mono text-lg font-bold sm:text-xl">
+                      {nf(data.followers)}
+                    </dd>
+                    <dt className="text-[11px] text-slate-400">Followers</dt>
+                  </div>
                 </dl>
               </section>
-              <section className={glass} style={{ borderColor: color + '55' }}>
-                <div className="flex items-center gap-3" style={{ color }}>
-                  <Icon className="h-8 w-8" aria-hidden />
-                  <div><p className="text-xs text-slate-400">Current tier</p><p className="text-2xl font-bold tracking-wide">{tier!.cur.name}</p></div>
+
+              {/* Developer Score Rating Card */}
+              <section
+                className={`${glass} flex flex-col justify-between`}
+                style={{ borderColor: `${color}60` }}
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400">
+                      Developer Overall Rating
+                    </span>
+                    <span
+                      className="rounded px-2 py-0.5 font-mono text-[10px] font-semibold text-black"
+                      style={{ background: color }}
+                    >
+                      {tier?.badge}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex items-baseline gap-4">
+                    <div className="font-mono text-6xl font-black tracking-tight" style={{ color }}>
+                      {score}
+                      <span className="text-3xl font-light text-slate-400">%</span>
+                    </div>
+                    <div>
+                      <div className="text-xl font-bold tracking-tight text-white">
+                        {evaluation.ratingTitle}
+                      </div>
+                      <div className="font-medium text-slate-400">
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="mt-3 text-xs leading-relaxed text-slate-300">
+                    ከመቶ ፐርሰንት (100%) በሚያወዳድሩ 6 ቁልፍ መስፈርቶች የተሰላ ውጤት። ዝቅተኛው የተፈቀደው መነሻ ውጤት 15%
+                    ነው።
+                  </p>
                 </div>
-                {tier!.next ? (<>
-                  <div className="mt-5 flex items-end justify-between text-sm">
-                    <span className="flex items-center gap-1.5" style={{ color: tier!.next.color }}><NIcon className="h-4 w-4" aria-hidden />Next: {tier!.next.name}</span>
-                    <span><b className="text-lg">{nf(tier!.next.min - data.contributions)}</b> <span className="text-slate-400">commits to go</span></span>
+
+                <div className="mt-6 border-t border-white/10 pt-4">
+                  <div className="flex items-center justify-between font-mono text-xs">
+                    <span className="text-slate-400">Scale Progress</span>
+                    <span style={{ color }}>{score} / 100%</span>
                   </div>
-                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
-                    <div className="h-full rounded-full" style={{ width: pct + '%', background: `linear-gradient(90deg, ${tier!.cur.color}, ${tier!.next.color})` }} />
+                  <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full transition-all duration-700 ease-out"
+                      style={{
+                        width: `${score}%`,
+                        background: `linear-gradient(90deg, #38bdf8, ${color})`,
+                      }}
+                    />
                   </div>
-                  <div className="mt-1 flex justify-between text-xs text-slate-400"><span>{nf(data.contributions)}</span><span>{nf(tier!.next.min)}</span></div>
-                </>) : <p className="mt-4 text-sm text-slate-300">Top tier reached. Nothing left to climb.</p>}
+                  <div className="mt-1.5 flex justify-between font-mono text-[10px] text-slate-400">
+                    <span>15% (መነሻ)</span>
+                    <span>50%</span>
+                    <span>100% (ሊቅ)</span>
+                  </div>
+                </div>
               </section>
             </div>
-            <div className="flex flex-col gap-5">
-              <section className={glass}>
-                <div className="flex justify-between text-xs text-slate-400"><span>Now playing</span><span>{fmt(dur)}</span></div>
-                <p className="mt-4 text-sm font-medium" style={{ color }}>{tier!.cur.name} frequency</p>
-                <h2 className="mt-1 text-3xl font-semibold leading-tight tracking-tight">{tier!.cur.track}</h2>
-                <p className="mt-1 text-sm text-slate-400">GitMusice Originals · {tier!.cur.name} tier</p>
-                <canvas ref={cv} width={480} height={88} className="mx-auto my-6 h-11 w-60" aria-hidden />
-                <div className="flex items-center gap-4 border-t border-white/10 pt-5">
-                  <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-black transition hover:scale-105" style={{ background: color }}>
-                    {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 translate-x-px" />}</button>
-                  <div className="flex-1">
-                    <div className="h-1 rounded bg-white/10"><div className="h-full rounded" style={{ width: Math.min(100, (t / dur) * 100) + '%', background: color }} /></div>
-                    <div className="mt-1.5 flex justify-between text-xs text-slate-400"><span>{fmt(t)}</span><span>{fmt(dur)}</span></div>
+
+            {/* 2. THE CLASSICAL MUSIC INVITATION (የክላሲካል ሙዚቃ ግብዣ) */}
+            <section
+              className="relative overflow-hidden rounded-2xl border p-6 sm:p-8 backdrop-blur-2xl"
+              style={{
+                borderColor: `${color}80`,
+                background: `linear-gradient(135deg, ${color}15, rgba(10, 14, 20, 0.85))`,
+                boxShadow: `0 0 60px ${color}20`,
+              }}
+            >
+              <div className="relative z-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                {/* Dedication info */}
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-semibold text-black"
+                      style={{ background: color }}
+                    >
+                      <Music className="h-3.5 w-3.5" /> የክላሲካል ሙዚቃ ግብዣ
+                    </span>
+                    <span className="font-mono text-xs text-slate-300">
+                      Dedicated Classical Piece
+                    </span>
+                  </div>
+
+                  <h2 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                    {tier?.title}
+                  </h2>
+                  <p className="mt-1 font-serif text-lg italic text-amber-200/90">
+                    
+                  </p>
+
+                  <div className="mt-4 rounded-xl border border-white/10 bg-black/30 p-4">
+                    <p className="text-sm font-medium leading-relaxed text-amber-100">
+                      &ldquo;{tier?.amharicDedication}&rdquo;
+                    </p>
+                    <p className="mt-2 text-xs text-slate-400">{tier?.dedicationMessage}</p>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                    <span className="font-mono text-slate-400">የተሰናዱ መሳሪያዎች (Instruments):</span>
+                    {tier?.instruments.map((inst) => (
+                      <span
+                        key={inst}
+                        className="rounded border border-white/15 bg-white/5 px-2 py-0.5 text-slate-200"
+                      >
+                        {inst}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </section>
-              <section className={glass}>
-                <div className="flex justify-between text-xs text-slate-400"><span>README badge</span><span>Share your vibe</span></div>
-                <div className="mt-4 rounded-lg border border-white/10 bg-black/30 p-3"><img src={`/api/badge/${data.login}`} alt="GitMusice badge preview" className="h-10" /></div>
-                <button onClick={copy} className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/5 py-2.5 text-sm font-medium transition hover:border-lime-300">
-                  {copied ? <Check className="h-4 w-4 text-lime-300" /> : <Copy className="h-4 w-4" />}{copied ? 'Copied to clipboard' : 'Copy Markdown'}</button>
-              </section>
-            </div>
+
+                {/* Player & Visualizer */}
+                <div className="flex flex-col gap-4">
+                  {/* Real-time Web Audio Visualizer */}
+                  <ClassicalVisualizer
+                    engine={eng.current}
+                    isPlaying={playing}
+                    color={color}
+                    movement={tier?.movement}
+                    bpm={tier?.tempoBpm}
+                  />
+
+                  {/* Audio Controls */}
+                  <div className="rounded-xl border border-white/10 bg-black/40 p-4">
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={toggle}
+                        aria-label={playing ? 'Pause classical piece' : 'Play classical piece'}
+                        className="grid h-14 w-14 shrink-0 place-items-center rounded-full text-black transition-all hover:scale-105 active:scale-95"
+                        style={{
+                          background: color,
+                          boxShadow: `0 0 25px ${color}60`,
+                        }}
+                      >
+                        {playing ? (
+                          <Pause className="h-6 w-6 fill-current" />
+                        ) : (
+                          <Play className="ml-1 h-6 w-6 fill-current" />
+                        )}
+                      </button>
+
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between font-mono text-xs">
+                          <span className="font-bold text-white">
+                            {playing ? 'Playing Classical Dedication' : 'Listen to Your Classical'}
+                          </span>
+                          <span className="text-slate-400">
+                            {fmt(t)} / {fmt(dur)}
+                          </span>
+                        </div>
+
+                        <div className="mt-2 h-1.5 w-full rounded-full bg-white/10">
+                          <div
+                            className="h-full rounded-full transition-all duration-100"
+                            style={{
+                              width: `${Math.min(100, (t / dur) * 100)}%`,
+                              background: color,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 3. DETAILED 6 EVALUATION CRITERIA (ክራይቴሪያዎችን ዘርዝሮ) */}
+            <section className={glass}>
+              <div className="flex flex-col justify-between gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end">
+                <div>
+                  <span className="font-mono text-xs uppercase tracking-wider text-sky-400">
+                    [ Specsheet Criteria Evaluation ]
+                  </span>
+                  <h3 className="mt-1 text-2xl font-bold tracking-tight text-white">
+                    የማወዳደሪያ ክራይቴሪያዎች ዝርዝር (Evaluation Breakdown)
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-400">
+                    እያንዳንዱ ክራይቴሪያ ከመቶ (15% - 100%) ተሰልቶ አጠቃላይ ውጤት ተሰጥቷል።
+                  </p>
+                </div>
+                <div className="font-mono text-xs text-slate-400">
+                  Overall Score: <b className="text-lg text-white">{score}%</b>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {evaluation.criteria.map((c, idx) => (
+                  <div
+                    key={c.key}
+                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-black/25 p-4 transition hover:border-white/20"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-xs font-semibold text-slate-400">
+                          0{idx + 1} · {c.key}
+                        </span>
+                        <span className="rounded bg-white/10 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                          Weight: {c.weight}%
+                        </span>
+                      </div>
+
+                      <div className="mt-3 flex items-baseline justify-between">
+                        <div>
+                          <h4 className="text-base font-bold text-white">{c.name}</h4>
+  
+                        </div>
+                        <div className="font-mono text-2xl font-black text-sky-300">{c.score}%</div>
+                      </div>
+
+                      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/10">
+                        <div
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${c.score}%`,
+                            background:
+                              c.score >= 80 ? '#facc15' : c.score >= 50 ? '#38bdf8' : '#9ca3af',
+                          }}
+                        />
+                      </div>
+
+                      <p className="mt-3 text-xs leading-relaxed text-slate-300">{c.amharicDesc}</p>
+                      <p className="mt-1 text-[11px] text-slate-400">{c.description}</p>
+                    </div>
+
+                    <div className="mt-4 border-t border-white/10 pt-2 font-mono text-[11px] text-sky-400">
+                      {c.metric}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 4. README BADGE EMBED & SHARE */}
+            <section className={glass}>
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <span className="font-mono text-xs uppercase text-slate-400">
+                    GitHub README Badge
+                  </span>
+                  <h4 className="text-lg font-bold text-white">Share Your Classical Score</h4>
+                  <p className="text-xs text-slate-400">
+                    Embed an animated SVG badge on your GitHub profile or repository README.
+                  </p>
+                </div>
+                <button
+                  onClick={copy}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-2.5 font-mono text-xs font-semibold text-white transition hover:bg-white/20"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-4 w-4 text-emerald-400" /> Copied Markdown!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" /> Copy README Markdown
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-white/10 bg-black/40 p-4 text-center sm:text-left">
+                <img
+                  src={`/api/badge/${data.login}`}
+                  alt="GitMusice badge"
+                  className="inline-block h-10"
+                />
+              </div>
+            </section>
           </div>
         )}
       </main>
