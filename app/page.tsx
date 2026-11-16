@@ -73,28 +73,28 @@ export default function Home() {
       <div className="flex items-center gap-5 px-6 py-7 sm:px-8">
         <div className="avatar-art" aria-hidden>
           <span className="avatar-face"><i /><b /><em /></span>
-          <span className="avatar-level">LV. 07</span>
+          <span className="avatar-level">85% OVR</span>
         </div>
         <div className="min-w-0">
-          <p className="font-mono text-xs text-cyan-300">@theoctocat</p>
-          <p className="mt-1.5 text-2xl tracking-tight sm:text-[1.7rem]">Midnight Builder</p>
-          <p className="mt-1.5 text-sm text-slate-400">Legend tier · Cyan pulse</p>
+          <p className="font-mono text-xs text-amber-300">@theoctocat</p>
+          <p className="mt-1.5 text-2xl tracking-tight sm:text-[1.7rem]">Maestro Architect</p>
+          <p className="mt-1.5 text-sm text-slate-400">85% Score · Vivace con Spirito</p>
         </div>
       </div>
 
       <div className="border-t border-white/10 px-6 py-5 sm:px-8">
-        <p className="text-xs text-slate-400">Now playing</p>
-        <p className="mt-1.5 text-xl tracking-tight">Commit After Midnight</p>
+        <p className="text-xs text-amber-300 font-mono">የክላሲካል ሙዚቃ ግብዣ · Now playing</p>
+        <p className="mt-1.5 text-xl tracking-tight font-serif italic text-white">Maestro&apos;s Rhapsody in B Minor</p>
 
         <SampleTrack />
       </div>
     </div>
 
     <div className="hero-vibe">
-      <Sparkles className="h-4 w-4 text-lime-300" aria-hidden />
+      <Sparkles className="h-4 w-4 text-amber-300" aria-hidden />
       <div>
-        <p className="text-xs text-slate-400">Vibe detected</p>
-        <p className="mt-0.5 text-sm font-semibold tracking-tight">Electronic / Ambient</p>
+        <p className="text-xs text-slate-400">Classical Dedication Unlocked</p>
+        <p className="mt-0.5 text-sm font-semibold tracking-tight text-white">Virtuoso Orchestral Rhapsody (85%)</p>
       </div>
     </div>
   </div>
@@ -117,15 +117,15 @@ export default function Home() {
             <ol className="divide-y divide-white/10 border-y border-white/10">
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">01</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">We read your rhythm</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">Enter a public GitHub username. GitMusice explores contribution patterns, streaks, languages, and milestones.</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">6ቱ የማወዳደሪያ መስፈርቶች</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">እያንዳንዱ ገንቢ በ6 ቁልፍ መስፈርቶች (ማድረስ፣ ቀጣይነት፣ የቋንቋዎች ስፋት፣ ጥልቀት፣ ተጽዕኖና ትብብር) ከመቶ ፐርሰንት (15% - 100%) ይገመገማል።</p></div>
               </li>
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">02</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">We build your identity</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">Your coding journey becomes a custom tier, visual aura, and musical genre that evolves with your work.</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">የክላሲካል ሙዚቃ ግብዣ</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">ፐርሰንትህ በጨመረ ቁጥር ይበልጥ ያማረ፣ የጠራና ልብ የሚነካ የክላሲካል ፒያኖና የኦርኬስትራ ሲምፎኒ ይጋበዝልሃል!</p></div>
               </li>
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">03</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">You play and share it</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">Listen to your generated track and add your living GitMusice badge to any profile README.</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">አድምጥና በባጅህ አጋራ</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">ልዩ ክላሲካልህን በስፔክትረም ቪዥዋላይዘር እያየህ አዳምጥ፤ በREADME ባጅህ አማካኝነትም ለጓደኞችህ አጋራ።</p></div>
               </li>
             </ol>
           </div>
