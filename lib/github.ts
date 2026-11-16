@@ -42,9 +42,30 @@ async function fetchFresh(u: string) {
   let contributions = 0;
   try { contributions = token ? await graphqlTotal(p.login, p.created_at, token) : await proxyTotal(p.login); }
   catch { try { contributions = await proxyTotal(p.login); } catch {} }
+
+  let stars = 0, forks = 0, languages: string[] = [];
+  try {
+    const rRes = await fetch(`https://api.github.com/users/${encodeURIComponent(p.login)}/repos?per_page=30&sort=pushed`, {
+      headers, next: { revalidate: 300 }, signal: AbortSignal.timeout(5000),
+    });
+    if (rRes.ok) {
+      const rData = await rRes.json();
+      if (Array.isArray(rData)) {
+        const lSet = new Set<string>();
+        for (const item of rData) {
+          stars += item.stargazers_count || 0;
+          forks += item.forks_count || 0;
+          if (item.language) lSet.add(item.language);
+        }
+        languages = Array.from(lSet);
+      }
+    }
+  } catch {}
+
   return {
     login: p.login, name: p.name || p.login, bio: p.bio || 'No bio yet. The commits speak for themselves.',
-    avatar: p.avatar_url, url: p.html_url, repos: p.public_repos, followers: p.followers, contributions,
+    avatar: p.avatar_url, url: p.html_url, repos: p.public_repos, followers: p.followers, following: p.following,
+    createdAt: p.created_at, stars, forks, languages, contributions,
   };
 }
 
