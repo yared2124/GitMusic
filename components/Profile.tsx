@@ -296,7 +296,7 @@ export default function Profile({
               </section>
             </div>
 
-            {/* 2. THE CLASSICAL MUSIC INVITATION (የክላሲካል ሙዚቃ ግብዣ) */}
+            {/* 2. THE CLASSICAL MUSIC INVITATION (Classical Music Invitation) */}
             <section
               className="relative overflow-hidden rounded-2xl border p-6 sm:p-8 backdrop-blur-2xl"
               style={{
@@ -313,7 +313,7 @@ export default function Profile({
                       className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-semibold text-black"
                       style={{ background: color }}
                     >
-                      <Music className="h-3.5 w-3.5" /> የክላሲካል ሙዚቃ ግብዣ
+                      <Music className="h-3.5 w-3.5" /> Classical Music Invitation
                     </span>
                     <span className="font-mono text-xs text-slate-300">
                       Dedicated Classical Piece
@@ -329,7 +329,7 @@ export default function Profile({
 
                   <div className="mt-4 rounded-xl border border-white/10 bg-black/30 p-4">
                     <p className="text-sm font-medium leading-relaxed text-amber-100">
-                      &ldquo;{tier?.amharicDedication}&rdquo;
+                      &ldquo;{tier?.dedicationMessage}&rdquo;
                     </p>
                     <p className="mt-2 text-xs text-slate-400">{tier?.dedicationMessage}</p>
                   </div>
