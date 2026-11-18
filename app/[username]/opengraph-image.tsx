@@ -76,7 +76,7 @@ export default async function Image({ params }: { params: { username: string } }
           {ev.overallScore}% OVR
         </div>
         <div style={{ fontSize: 34, marginTop: 12, color: '#ffffff' }}>
-          {ev.ratingTitle} ({ev.amharicRatingTitle})
+          {ev.ratingTitle}
         </div>
         <div style={{ fontSize: 26, color: '#9aa7ad', marginTop: 8 }}>
           {ev.classicalTier.title}
