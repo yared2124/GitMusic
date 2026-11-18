@@ -83,7 +83,7 @@ export default function Home() {
       </div>
 
       <div className="border-t border-white/10 px-6 py-5 sm:px-8">
-        <p className="text-xs text-amber-300 font-mono">የክላሲካል ሙዚቃ ግብዣ · Now playing</p>
+        <p className="text-xs text-amber-300 font-mono">Classical Music Invitation · Now playing</p>
         <p className="mt-1.5 text-xl tracking-tight font-serif italic text-white">Maestro&apos;s Rhapsody in B Minor</p>
 
         <SampleTrack />
@@ -117,15 +117,15 @@ export default function Home() {
             <ol className="divide-y divide-white/10 border-y border-white/10">
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">01</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">6ቱ የማወዳደሪያ መስፈርቶች</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">እያንዳንዱ ገንቢ በ6 ቁልፍ መስፈርቶች (ማድረስ፣ ቀጣይነት፣ የቋንቋዎች ስፋት፣ ጥልቀት፣ ተጽዕኖና ትብብር) ከመቶ ፐርሰንት (15% - 100%) ይገመገማል።</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">The 6 Evaluation Criteria</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">Every developer is evaluated across 6 key criteria (Shipping, Consistency, Language Range, Depth, Impact & Collaboration) scored from 15% to 100%.</p></div>
               </li>
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">02</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">የክላሲካል ሙዚቃ ግብዣ</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">ፐርሰንትህ በጨመረ ቁጥር ይበልጥ ያማረ፣ የጠራና ልብ የሚነካ የክላሲካል ፒያኖና የኦርኬስትራ ሲምፎኒ ይጋበዝልሃል!</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">Your Classical Music Invitation</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">The higher your score, the more beautiful and emotionally rich the classical piano and orchestral symphony you are invited to!</p></div>
               </li>
               <li className="grid grid-cols-[34px_1fr] gap-4 py-6">
                 <span className="font-mono text-[10px] text-lime-300">03</span>
-                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">አድምጥና በባጅህ አጋራ</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">ልዩ ክላሲካልህን በስፔክትረም ቪዥዋላይዘር እያየህ አዳምጥ፤ በREADME ባጅህ አማካኝነትም ለጓደኞችህ አጋራ።</p></div>
+                <div><h3 className="text-2xl font-bold tracking-[-.04em] text-white sm:text-3xl">Listen & Share Your Badge</h3><p className="mt-2 max-w-lg text-base font-medium leading-7 text-slate-300">Listen to your unique classical piece with the spectrum visualizer, then share it with friends via your README badge.</p></div>
               </li>
             </ol>
           </div>
