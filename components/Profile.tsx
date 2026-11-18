@@ -268,8 +268,7 @@ export default function Profile({
                   </div>
 
                   <p className="mt-3 text-xs leading-relaxed text-slate-300">
-                    ከመቶ ፐርሰንት (100%) በሚያወዳድሩ 6 ቁልፍ መስፈርቶች የተሰላ ውጤት። ዝቅተኛው የተፈቀደው መነሻ ውጤት 15%
-                    ነው።
+                   The score is calculated across 6 key criteria, each rated from 15% (minimum) to 100% (maximum).
                   </p>
                 </div>
 
@@ -288,9 +287,9 @@ export default function Profile({
                     />
                   </div>
                   <div className="mt-1.5 flex justify-between font-mono text-[10px] text-slate-400">
-                    <span>15% (መነሻ)</span>
+                    <span>15% (Baseline)</span>
                     <span>50%</span>
-                    <span>100% (ሊቅ)</span>
+                    <span>100% (Legend)</span>
                   </div>
                 </div>
               </section>
@@ -324,18 +323,17 @@ export default function Profile({
                     {tier?.title}
                   </h2>
                   <p className="mt-1 font-serif text-lg italic text-amber-200/90">
-                    
+                    {tier?.description}
                   </p>
 
                   <div className="mt-4 rounded-xl border border-white/10 bg-black/30 p-4">
                     <p className="text-sm font-medium leading-relaxed text-amber-100">
-                      &ldquo;{tier?.dedicationMessage}&rdquo;
+                      &ldquo;{tier?.description}&rdquo;
                     </p>
-                    <p className="mt-2 text-xs text-slate-400">{tier?.dedicationMessage}</p>
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                    <span className="font-mono text-slate-400">የተሰናዱ መሳሪያዎች (Instruments):</span>
+                    <span className="font-mono text-slate-400">Instruments:</span>
                     {tier?.instruments.map((inst) => (
                       <span
                         key={inst}
@@ -403,7 +401,7 @@ export default function Profile({
               </div>
             </section>
 
-            {/* 3. DETAILED 6 EVALUATION CRITERIA (ክራይቴሪያዎችን ዘርዝሮ) */}
+            {/* 3. DETAILED 6 EVALUATION CRITERIA */}
             <section className={glass}>
               <div className="flex flex-col justify-between gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end">
                 <div>
@@ -411,10 +409,10 @@ export default function Profile({
                     [ Specsheet Criteria Evaluation ]
                   </span>
                   <h3 className="mt-1 text-2xl font-bold tracking-tight text-white">
-                    የማወዳደሪያ ክራይቴሪያዎች ዝርዝር (Evaluation Breakdown)
+                    Evaluation Breakdown
                   </h3>
                   <p className="mt-1 text-xs text-slate-400">
-                    እያንዳንዱ ክራይቴሪያ ከመቶ (15% - 100%) ተሰልቶ አጠቃላይ ውጤት ተሰጥቷል።
+                    Each criterion is scored from 15% to 100% and contributes to the overall result.
                   </p>
                 </div>
                 <div className="font-mono text-xs text-slate-400">
@@ -457,8 +455,7 @@ export default function Profile({
                         />
                       </div>
 
-                      <p className="mt-3 text-xs leading-relaxed text-slate-300">{c.amharicDesc}</p>
-                      <p className="mt-1 text-[11px] text-slate-400">{c.description}</p>
+                      <p className="mt-3 text-xs leading-relaxed text-slate-300">{c.description}</p>
                     </div>
 
                     <div className="mt-4 border-t border-white/10 pt-2 font-mono text-[11px] text-sky-400">
